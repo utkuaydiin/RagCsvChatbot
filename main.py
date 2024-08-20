@@ -14,14 +14,7 @@ from langchain.document_loaders.base import BaseLoader
 
 load_dotenv()
 
-# 1. Open the CSV file in reading mode and the TXT file in writing mode
-with open(r'C:\Users\asus\Desktop\Python\Rag\pythonProject\cleaned_web_traffic_data (1).csv', 'r') as f_in, open(r'C:\Users\asus\Desktop\Python\Rag\pythonProject\text.txt', 'w') as f_out:
-    # 2. Read the CSV file and store in variable
-    content = f_in.read()
-    # 3. Write the content into the TXT file
-    f_out.write(content)
-
-df = pd.read_csv(r"C:\Users\asus\Desktop\Python\Rag\pythonProject\cleaned_web_traffic_data (1).csv")
+df = pd.read_csv(r"cleaned_web_traffic_data.csv")
 llm = ChatOpenAI(model = "gpt-4")
 
 
@@ -105,6 +98,7 @@ vectorstore = Chroma.from_documents(documents=document, embedding=OpenAIEmbeddin
 retriever = vectorstore.as_retriever()
 
 #daha önce yazılan rag promptu hubdan çeker
+#tested prompt
 prompt = hub.pull("rlm/rag-prompt")
 
 def format_docs(docs):
