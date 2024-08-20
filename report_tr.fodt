@@ -1,0 +1,43 @@
+Amaç:
+Bu projenin amacı, bir Retrieval-Augmented Generation (RAG) modeli kullanarak bir CSV dosyasında saklanan büyük bir veri setini sorgulama ve bu verilerle etkileşimde bulunma yeteneğine sahip bir sistem geliştirmektir. Sistem, LangChain, OpenAI'nin GPT-4 modeli ve özel DataFrame yükleyicilerini entegre ederek, modeli kullanıcının sürekli olarak veri almasını ve işlemesini sağlayan bir yapıda kurmaktadır.
+
+Kullanılan Araçlar ve Kütüphaneler:
+LangChain: RAG modelini oluşturmak ve sorgulama ile oluşturma bileşenlerini yönetmek için kullanıldı.
+Chroma: Doküman gömme işlemlerini yönetmek ve ilgili bilgilerin verimli bir şekilde alınmasını sağlamak için vektör deposu olarak kullanıldı.
+OpenAI (ChatGPT-4): Elde edilen verilere ve kullanıcı sorgularına dayalı yanıtlar oluşturmak için dil modeli olarak entegre edildi.
+Pandas: CSV verilerini okumak ve işlemek için kullanıldı.
+Python Temel Kütüphaneleri: Dosya işlemleri ve genel betik görevleri için kullanıldı.
+Çevre Yönetimi: dotenv ile API anahtarları ve diğer çevre değişkenlerinin güvenli bir şekilde yönetimi sağlandı.
+Uygulama Adımları:
+Veri Hazırlığı:
+
+Web trafiği verilerini içeren CSV dosyası Pandas DataFrame'e yüklendi ve okundu. Dosya ayrıca daha kolay işlenebilmesi için bir metin dosyasına dönüştürüldü, böylece veriler dil modeli tarafından alınmaya uygun bir formata getirildi.
+Özel DataFrame Yükleyici:
+
+DataFrame'in LangChain hattına uygun bir formata dönüştürülmesini ve yüklenmesini kolaylaştırmak amacıyla BaseLoader sınıfından türetilmiş özel bir DataFrameLoader sınıfı oluşturuldu. Bu yükleyici, DataFrame boyunca iterasyon yaparak ilgili sütunları (örneğin, URL, IP Adresi, Zaman Damgası, Yöntem, Durum, Boyut ve Kullanıcı Ajanı) çıkardı ve her satırı bir Document nesnesine dönüştürdü.
+Metin Bölme:
+
+Doküman verilerinin yönetilebilir boyutlara (1000 karakter ve 200 karakter örtüşme ile) bölünmesi için RecursiveCharacterTextSplitter uygulandı. Bu adım, verimli gömme ve sorgulama için kritik öneme sahipti.
+Gömme ve Vektör Deposu:
+
+Parçalanmış dokümanlar için gömme işlemleri gerçekleştirmek amacıyla OpenAIEmbeddings modeli kullanıldı. Bu gömmeler Chroma tarafından yönetildi ve depolandı; böylece sistemin kullanıcı sorgularına yanıt olarak ilgili bilgileri verimli bir şekilde alması sağlandı.
+Retrieval-Augmented Generation (RAG) Zinciri:
+
+Sorgulama bileşeni Chroma kullanılarak oluşturulurken, oluşturma bileşeni GPT-4 ile entegre edildi. Bu bileşenlerin entegrasyonu ile bir RAG zinciri oluşturularak, sistemin kullanıcının sorusuna göre önce ilgili dokümanları alması ve ardından alınan verilerle tutarlı bir yanıt üretmesi sağlandı.
+RAG promptu, sorgulama ve oluşturma için standart bir yaklaşım sağlamak amacıyla LangChain Hub'dan çekildi.
+Kullanıcı Etkileşimi:
+
+Sistem, kullanıcıların veri hakkında sürekli olarak soru sorabileceği bir komut satırı arayüzü (CLI) ortamında çalışacak şekilde tasarlandı. Sistem, kullanıcı girişlerini dinler, RAG zinciri ile sorguları işler ve AI'nın yanıtını gerçek zamanlı olarak iletir.
+Basit bir çıkış koşulu uygulanarak, kullanıcıların 'exit' yazarak oturumu sonlandırabilmesi sağlandı.
+Zorluklar ve Dikkat Edilmesi Gerekenler:
+Veri Formatı Tutarlılığı: Verilerin doğru bir şekilde biçimlendirilmesini ve etkili bir şekilde gömme ve sorgulama için yapılandırılmasını sağlamak zorlayıcı oldu. Özel yükleyici, CSV dosyasındaki çeşitli veri türlerini ve olası tutarsızlıkları göz önünde bulundurmak zorundaydı.
+Gerçek Zamanlı Etkileşim: AI'nın yanıtını gerçek zamanlı olarak iletmek, özellikle büyük veri setlerini işlerken yanıt gecikmesi ve işlem hızını dikkatlice değerlendirmeyi gerektirdi.
+Ölçeklenebilirlik: Sistem mimarisinin, daha büyük veri setlerini ve daha karmaşık sorguları işleyebilecek şekilde ölçeklenebilir olması gerekiyordu; bu da metin bölme ve gömme işlemlerinin optimize edilmesiyle sağlandı.
+Sonuçlar:
+Proje, kullanıcıların doğal dil kullanarak bir CSV veri setini sorgulamasını sağlayan bir sistem geliştirmeyi başardı. LangChain, Chroma ve OpenAI'nin GPT-4 modelinin entegrasyonu, veri alımı ile bağlam açısından uygun yanıtların üretilmesi arasında sorunsuz bir etkileşim sağladı. Nihai uygulama, sistemin gerçek zamanlı sorguları işleme yeteneğini gösterdi ve daha karmaşık veri türlerini işleme kapasitesini genişletme veya ek modelleri entegre etme gibi gelecekteki geliştirmelere temel oluşturdu.
+
+Gelecekteki Çalışmalar:
+RAG Modelinin Geliştirilmesi: Sorgulama ve oluşturma bileşenlerinin daha da optimize edilmesi, özellikle büyük veri setleri için doğruluğu ve yanıt süresini artırabilir.
+Kullanıcı Arayüzü İyileştirmeleri: Komut satırı arayüzünden grafiksel kullanıcı arayüzüne (GUI) geçiş, kullanıcı deneyimini ve erişilebilirliği artırabilir.
+Ek Veri Formatları İçin Destek: Sistemin, JSON veya SQL veritabanları gibi diğer veri formatlarını desteklemesi, uygulama alanını genişletebilir.
+Performans Ölçütleri: Performans darboğazlarını belirlemek ve sistemi daha hızlı ve daha verimli sorgulama için optimize etmek amacıyla detaylı performans ölçütleri yapılmalıdır.
